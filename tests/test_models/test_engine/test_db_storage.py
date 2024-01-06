@@ -78,11 +78,88 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_all_no_class(self):
         """Test that all returns all rows when no class is passed"""
+        new_state = State()
+        new_state.name = "Lagos"
+        new_state.save()
+        new_city = City()
+        new_city.name = "Ikeja"
+        new_city.state_id = new_state.id
+        new_city.save()
+        all = models.storage.all()
+        self.assertIsNotNone(all.get(
+            new_state.__class__.__name__ + "." + new_state.id))
+        self.assertIsNotNone(all.get(
+            new_city.__class__.__name__ + "." + new_city.id))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_all_with_class(self):
+        """Test that all returns all class element when class is passed"""
+        new_state = State()
+        new_state.name = "Lagos"
+        new_state.save()
+        new_city = City()
+        new_city.name = "Ikeja"
+        new_city.state_id = new_state.id
+        new_city.save()
+        states = models.storage.all(State)
+        self.assertTrue(all(s.__class__.__name__ == "State"
+                            for s in states.values()))
+        cities = models.storage.all(City)
+        self.assertTrue(all(c.__class__.__name__ == "City"
+                            for c in cities.values()))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_new(self):
         """test that new adds an object to the database"""
+        new_state = State()
+        new_state.name = "Lagos"
+        models.storage.new(new_state)
+        all_state = models.storage.all()
+        self.assertIsNotNone(all_state.get(
+            new_state.__class__.__name__ + "." + new_state.id))
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
+        new_state = State()
+        new_state.name = "Lagos"
+        models.storage.new(new_state)
+        models.storage.save()
+        models.storage.reload()
+        all = models.storage.all()
+        self.assertIsNotNone(all.get(
+            new_state.__class__.__name__ + "." + new_state.id))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_delete(self):
+        """Test that delete remove an object from the date base"""
+        new_state = State()
+        new_state.name = "London"
+        new_state.save()
+        all = models.storage.all()
+        self.assertIsNotNone(all.get(
+            new_state.__class__.__name__ + "." + new_state.id))
+        models.storage.delete(new_state)
+        all = models.storage.all()
+        self.assertIsNone(all.get(
+            new_state.__class__.__name__ + "." + new_state.id))
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_get(self):
+        """Test get method"""
+        new_state = State()
+        new_state.name = "Paris"
+        new_state.save()
+        obj = models.storage.get(State, new_state.id)
+        self.assertEqual(obj.id, new_state.id)
+        self.assertEqual(obj.name, new_state.name)
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
+    def test_count(self):
+        """Test count method"""
+        count_1 = models.storage.count(State)
+        new_state = State()
+        new_state.name = "Tenerife"
+        new_state.save()
+        count_2 = models.storage.count(State)
+        self.assertGreater(count_2, count_1)
