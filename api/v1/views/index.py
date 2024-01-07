@@ -13,6 +13,7 @@ def status():
     that returns a JSON"""
     return jsonify({"status": "OK"})
 
+
 @app_views.route('/api/v1/stats', methods=['GET'], strict_slashes=False)
 def stats():
     """
@@ -29,4 +30,3 @@ def stats():
         stats_dict[obj_type] = count
 
     return jsonify(stats_dict)
-
