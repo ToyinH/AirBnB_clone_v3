@@ -21,22 +21,21 @@ def get_place(city_id):
         else:
             abort(404)
     elif request.method == 'POST':
+        city = storage.get(City, city_id)
+        if not city:
+            abort(404)
         post = request.get_json()
         if post:
-            city = storage.get(City, city_id)
-            if city:
-                if "user_id" not in post:
-                    return "Missing user_id", 400
-                if not storage.get(User, post.get("user_id")):
-                    abort(404)
-                if "name" not in post:
-                    return "Missing name", 400
-                post["city_id"] = city_id
-                new_place = Place(**post)
-                new_place.save()
-                return jsonify(new_place.to_dict()), 201
-            else:
+            if "user_id" not in post:
+                return "Missing user_id", 400
+            if not storage.get(User, post.get("user_id")):
                 abort(404)
+            if "name" not in post:
+                return "Missing name", 400
+            post["city_id"] = city_id
+            new_place = Place(**post)
+            new_place.save()
+            return jsonify(new_place.to_dict()), 201                
         else:
             return "Not a JSON", 400
 
@@ -44,7 +43,7 @@ def get_place(city_id):
 @app_views.route("/places/<place_id>", methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
 def places(place_id):
-    """Places"""
+    """Retreive, Delete and Post Places"""
     if request.method == 'GET':
         place = storage.get(Place, place_id)
         return jsonify(place.to_dict()) if place else (abort(404))
@@ -62,7 +61,7 @@ def places(place_id):
             put = request.get_json()
             if put:
                 for k, v in put.items():
-                    if k not in ["id", "created_at", "updated_at"]:
+                    if k not in ["id", "user_id", "created_at", "updated_at"]:
                         setattr(place, k, v)
                     place.save()
                     return place.to_dict()
