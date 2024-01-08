@@ -18,7 +18,8 @@ def amenity(amenity_id=None):
         amenities_list = []
         if amenity_id:
             amenity = storage.get(Amenity, amenity_id)
-            return jsonify(amenity.to_dict()) if amenity else (abort(404))
+            return jsonify(amenity.to_dict()) if amenity else (
+                abort(404))
         else:
             for v in amenities_all.values():
                 amenities_list.append(v.to_dict())
