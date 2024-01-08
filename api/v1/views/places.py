@@ -17,10 +17,7 @@ def get_place(city_id):
     if request.method == 'GET':
         city = storage.get(City, city_id)
         if city:
-            places = storage.all(Place)
-            p_with_id = [place for place in places.values()
-                         if place.city_id == city_id]
-            return jsonify(list(map(lambda x: x.to_dict(), p_with_id)))
+            return ([place.to_dict() for place in city.places])
         else:
             abort(404)
     elif request.method == 'POST':
@@ -37,7 +34,7 @@ def get_place(city_id):
                 post["city_id"] = city_id
                 new_place = Place(**post)
                 new_place.save()
-                return new_place.to_dict(), 201
+                return jsonify(new_place.to_dict()), 201
             else:
                 abort(404)
         else:
@@ -49,8 +46,6 @@ def get_place(city_id):
 def places(place_id):
     """Places"""
     if request.method == 'GET':
-        places_all = storage.all(Place)
-        places_list = []
         place = storage.get(Place, place_id)
         return jsonify(place.to_dict()) if place else (abort(404))
     elif request.method == 'DELETE':
@@ -58,7 +53,7 @@ def places(place_id):
         if place:
             storage.delete(place)
             storage.save()
-            return jsonify({})
+            return jsonify({}), 200
         else:
             abort(404)
     elif request.method == 'PUT':
