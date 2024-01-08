@@ -18,8 +18,7 @@ def amenity(amenity_id=None):
         amenities_list = []
         if amenity_id:
             amenity = storage.get(Amenity, amenity_id)
-            return jsonify(amenity.to_dict()) if amenity else (
-                abort(404))
+            return jsonify(amenity.to_dict()) if amenity else (abort(404))
         else:
             for v in amenities_all.values():
                 amenities_list.append(v.to_dict())
@@ -51,8 +50,8 @@ def amenity(amenity_id=None):
                 for k, v in put.items():
                     if k not in ["id", "created_at", "updated_at"]:
                         setattr(amenity, k, v)
-                    amenity.save()
-                    return amenity.to_dict()
+                amenity.save()
+                return amenity.to_dict()
             else:
                 return "Not a JSON", 400
         else:

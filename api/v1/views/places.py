@@ -64,8 +64,8 @@ def places(place_id):
                     if k not in ["id", "user_id", "city_id", "created_at",
                                  "updated_at"]:
                         setattr(place, k, v)
-                    place.save()
-                    return place.to_dict()
+                place.save()
+                return jsonify(place.to_dict())
             else:
                 return "Not a JSON", 400
         else:

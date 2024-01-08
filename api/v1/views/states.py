@@ -50,8 +50,8 @@ def states(state_id=None):
                 for k, v in put.items():
                     if k not in ["id", "created_at", "updated_at"]:
                         setattr(state, k, v)
-                    state.save()
-                    return state.to_dict()
+                state.save()
+                return state.to_dict()
             else:
                 return "Not a JSON", 400
         else:
