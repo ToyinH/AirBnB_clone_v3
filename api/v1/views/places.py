@@ -61,7 +61,7 @@ def places(place_id):
             put = request.get_json()
             if put:
                 for k, v in put.items():
-                    if k not in ["id", "user_id", "place_id", "created_at",
+                    if k not in ["id", "user_id", "city_id", "created_at",
                                  "updated_at"]:
                         setattr(place, k, v)
                     place.save()
