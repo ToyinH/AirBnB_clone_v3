@@ -5,8 +5,8 @@ State endpoint
 from api.v1.views import app_views
 from flask import jsonify, request, abort
 from models import storage
-from models.place import Place
 from models.city import City
+from models.place import Place
 from models.user import User
 
 
