@@ -35,7 +35,7 @@ def get_place(city_id):
             post["city_id"] = city_id
             new_place = Place(**post)
             new_place.save()
-            return jsonify(new_place.to_dict()), 201                
+            return jsonify(new_place.to_dict()), 201
         else:
             return "Not a JSON", 400
 
@@ -61,7 +61,8 @@ def places(place_id):
             put = request.get_json()
             if put:
                 for k, v in put.items():
-                    if k not in ["id", "user_id", "created_at", "updated_at"]:
+                    if k not in ["id", "user_id", "place_id", "created_at",
+                                 "updated_at"]:
                         setattr(place, k, v)
                     place.save()
                     return place.to_dict()
