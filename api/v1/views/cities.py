@@ -2,11 +2,12 @@
 """
 Cities API actions
 """
-from api.v1.views import app_views
-from flask import jsonify, request, abort
-from models import storage
+from flask import abort, jsonify, request
 from models.state import State
-from models.cities import City
+from models.city import City
+from api.v1.views import app_views
+from models import storage
+
 
 
 # Route for retrieving all City objects of a specific State
