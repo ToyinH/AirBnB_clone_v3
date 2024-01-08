@@ -17,7 +17,7 @@ def get_place(city_id):
     if request.method == 'GET':
         city = storage.get(City, city_id)
         if city:
-            return ([place.to_dict() for place in city.places])
+            return jsonify([place.to_dict() for place in city.places])
         else:
             abort(404)
     elif request.method == 'POST':
