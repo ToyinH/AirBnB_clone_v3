@@ -9,7 +9,6 @@ from api.v1.views import app_views
 from models import storage
 
 
-
 # Route for retrieving all City objects of a specific State
 @app_views.route('/states/<state_id>/cities', methods=['GET'],
                  strict_slashes=False)
@@ -27,6 +26,7 @@ def get_cities_by_state(state_id):
     #   the State and convert them to dictionaries
     cities = [city.to_dict() for city in state.cities]
     return jsonify(cities)
+
 
 # Route for retrieving a specific City object by ID
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
@@ -126,24 +126,3 @@ def update_city(city_id):
     else:
         # Return 404 error if the City object is not found
         abort(404)
-
-
-# # Error Handlers:
-# @app_views.errorhandler(404)
-# def not_found(error):
-#     '''
-#     404: Not Found.
-#     '''
-#     # Return a JSON response for 404 error
-#     return jsonify({'error': 'Not found'}), 404
-
-
-# @app_views.errorhandler(400)
-# def bad_request(error):
-#     '''
-#     Return Bad Request message for illegal requests to API.
-#     '''
-#     # Return a JSON response for 400 error
-#     return jsonify({'error': 'Bad Request'}), 400
-
-
