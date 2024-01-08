@@ -19,7 +19,7 @@ def get_place(city_id):
         if city:
             places = storage.all(Place)
             p_with_id = [place for place in places.values()
-                         if place.city_id == city.id]
+                         if place.city_id == city_id]
             return jsonify(list(map(lambda x: x.to_dict(), p_with_id)))
         else:
             abort(404)
@@ -44,20 +44,15 @@ def get_place(city_id):
             return "Not a JSON", 400
 
 
-@app_views.route("places/<place_id>", methods=['GET', 'DELETE', 'PUT'],
+@app_views.route("/places/<place_id>", methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def places(place_id=None):
+def places(place_id):
     """Places"""
     if request.method == 'GET':
         places_all = storage.all(Place)
         places_list = []
-        if place_id:
-            state = storage.get(Place, place_id)
-            return jsonify(state.to_dict()) if state else (abort(404))
-        else:
-            for v in places_all.values():
-                places_list.append(v.to_dict())
-            return jsonify(places_list)
+        place = storage.get(Place, place_id)
+        return jsonify(place.to_dict()) if place else (abort(404))
     elif request.method == 'DELETE':
         place = storage.get(Place, place_id)
         if place:
