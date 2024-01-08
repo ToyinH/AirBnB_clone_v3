@@ -19,23 +19,14 @@ def stats():
     """
     retrieves the number of each objects by type
     """
-    # stats_dict = {}
+    stats_dict = {}
 
-    # # Define the object types you want to count
-    # object_types = ['User', 'Place', 'City', 'State', 'Amenity', 'Review']
+    # Define the object types you want to count
+    object_types = ['User', 'Place', 'City', 'State', 'Amenity', 'Review']
 
-    # # Retrieve the count for each object type
-    # for obj_type in object_types:
-    #     count = storage.count(obj_type)
-    #     stats_dict[obj_type] = count
+    # Retrieve the count for each object type
+    for obj_type in object_types:
+        count = storage.count(obj_type)
+        stats_dict[obj_type] = count
 
-    # return jsonify(stats_dict)
-    stats = {
-        'amenities': storage.count('Amenity'),
-        'cities': storage.count('City'),
-        'places': storage.count('Place'),
-        'reviews': storage.count('Review'),
-        'states': storage.count('State'),
-        'users': storage.count('User')
-    }
-    return jsonify(stats)
+    return jsonify(stats_dict)
