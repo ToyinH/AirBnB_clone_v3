@@ -99,7 +99,6 @@ def create_review(place_id):
         # Return 404 error if the User object is not found
         abort(404)
 
-    
     data['place_id'] = place_id
     # Create a new Review object with the JSON data
     review = Review(**data)
